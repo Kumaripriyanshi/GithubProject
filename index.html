@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Repositories</title>
+   
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            padding: 20px;
+        }
+        .loader {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .avatar{
+            height: 53%;
+    width: 42%;
+    border-radius: 50%;
+    display: block;
+        }
+
+        .profile{
+            display: flex;
+    height: 271px;
+        }
+
+        .Profile_pic{
+            display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    flex-direction: column;
+    width: 24%;
+        }
+
+        .details{
+            width: 50%;
+        }
+
+        #repositories{
+            display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+        }
+
+        .topics {
+            color: white;
+            background-color: rgb(75, 75, 228);
+        }
+
+        .card{
+            width: 30%;
+        }
+
+        .name, .bio{
+            color: #1c1c18;
+    font-size: larger;
+    font-weight: bold;
+        }
+        .mgRight{
+            margin-right: 6px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container ">
+   
+    <nav class="navbar navbar-expand-lg bg-body-tertiary ">
+        <div class="container-fluid">
+            <h1 class="">GitHub Repositories</h1>
+            <form class="d-flex" role="search">
+               
+                <input type="text" class="form-control mgRight" id="username" placeholder="Enter username">
+                <button type="button" class="btn btn-primary" onclick="getRepositories()">Search</button>
+            </form>
+          </div>
+        </nav> 
+    </div>
+<hr>
+    <div class="profile">
+        
+            <div class="Profile_pic">
+                <img class="avatar mb-3" src="" alt="User img">
+                <span class="d-flex justify-content-center">
+                    <svg style="width: 6%;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M579.8 267.7c56.5-56.5 56.5-148 0-204.5c-50-50-128.8-56.5-186.3-15.4l-1.6 1.1c-14.4 10.3-17.7 30.3-7.4 44.6s30.3 17.7 44.6 7.4l1.6-1.1c32.1-22.9 76-19.3 103.8 8.6c31.5 31.5 31.5 82.5 0 114L422.3 334.8c-31.5 31.5-82.5 31.5-114 0c-27.9-27.9-31.5-71.8-8.6-103.8l1.1-1.6c10.3-14.4 6.9-34.4-7.4-44.6s-34.4-6.9-44.6 7.4l-1.1 1.6C206.5 251.2 213 330 263 380c56.5 56.5 148 56.5 204.5 0L579.8 267.7zM60.2 244.3c-56.5 56.5-56.5 148 0 204.5c50 50 128.8 56.5 186.3 15.4l1.6-1.1c14.4-10.3 17.7-30.3 7.4-44.6s-30.3-17.7-44.6-7.4l-1.6 1.1c-32.1 22.9-76 19.3-103.8-8.6C74 372 74 321 105.5 289.5L217.7 177.2c31.5-31.5 82.5-31.5 114 0c27.9 27.9 31.5 71.8 8.6 103.9l-1.1 1.6c-10.3 14.4-6.9 34.4 7.4 44.6s34.4 6.9 44.6-7.4l1.1-1.6C433.5 260.8 427 182 377 132c-56.5-56.5-148-56.5-204.5 0L60.2 244.3z"/></svg>
+                    <a href="" class="text-center github_Link">Github Link</a>
+                </span>
+                
+            </div>
+            <div class="details">
+                <div class="name">John Doe</div>
+                <div class="bio">No Description Available</div>
+                <!-- <div class="location">Location</div>
+                <div class="twitter url"></div> -->
+            </div>
+     
+    </div>
+
+    <div id="loader" class="loader" style="display: none;"></div>
+
+    <div id="repositories">
+      
+    </div>
+
+    <!-- Pagination  -->
+    <nav aria-label="Page navigation " id="page" style="display: flex; justify-content: center;">
+        <ul id="pagination" class="pagination">
+            <li class="page-item"><a class="page-link" href="#" onclick="changePage(-1)">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="#" onclick="changePage(1)">Next</a></li>
+        </ul>
+    </nav>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script>
+    const API_URL = 'https://api.github.com';
+    const PER_PAGE_DEFAULT = 10;
+    const PER_PAGE_MAX = 100;
+    let username = '';
+    let page = 1;
+    let perPage = PER_PAGE_DEFAULT;
+    displayRepositories([])
+
+    function getRepositories() {
+        console.log("asiaoisoais")
+        username = document.getElementById('username').value;
+        console.log(username)
+        page = 1;
+        perPage = PER_PAGE_DEFAULT;
+        
+        showLoader();
+        clearRepositories();
+
+        fetchRepositories();
+    }
+
+    async function fetchRepositories() {
+
+        try {
+            const response = await fetch(`${API_URL}/users/${username}/repos?page=${page}&per_page=${perPage}`, {
+            headers: {
+                'Authorization': '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',
+            },
+        });
+
+        const repositories = await response.json();
+        hideLoader();
+        console.log(repositories)
+        displayRepositories(repositories);
+
+        // Check if there are more pages
+        const linkHeader = response.headers.get('Link');
+        const hasNextPage = linkHeader && linkHeader.includes('rel="next"');
+
+        if (hasNextPage) {
+            enablePagination();
+        } else {
+            disablePagination();
+        }
+        } catch (error) {
+            displayRepositories([]);
+        }
+       
+    }
+
+    function displayRepositories(repositories) {
+        const repositoriesContainer = document.getElementById('repositories');
+        const profile = document.getElementsByClassName("profile")[0]
+        console.log(repositories)
+        if (repositories.length === 0) {
+            repositoriesContainer.innerHTML = '<p>No repositories found.</p>';
+            profile.style.display="none";
+            document.getElementById("page").style.marginTop="30%"
+            return;
+        }
+
+        //Setting the default style settings
+        document.getElementById("page").style.marginTop="auto"
+
+        profile.style.display="flex";
+        let publicRepo=repositories.filter((repo)=>repo.visibility=="public")
+        const avatar = document.getElementsByClassName("avatar")[0].setAttribute("src",`${publicRepo[0].owner.avatar_url}`)
+        document.getElementsByClassName("github_Link")[0].innerText=`${publicRepo[0].owner.html_url}`
+        document.getElementsByClassName("github_Link")[0].setAttribute("href",`${publicRepo[0].owner.html_url}`)
+
+        document.getElementsByClassName("name")[0].innerText=`${publicRepo[0].owner.login}`
+
+
+
+        console.log(publicRepo[0].owner.html_url)
+        console.log(publicRepo)
+
+        //display the repositories 
+        repositoriesContainer.innerHTML = publicRepo.map(repo => (
+            `<div class="card mb-4 mgRight">
+                <div class="card-body">
+                  
+                    <h5 class="card-title">${repo.name}</h5>
+                    <p class="card-text">${repo.description || 'No description available.'}</p>
+                    <p class="card-text">Topics: ${repo.topics.join(', ') || 'No topics available.'}</p>
+                   
+                </div>
+            </div>`
+        )).join(' ');
+
+        
+    }
+
+
+    function changePage(delta) {
+        page += delta;
+        if (page < 1) {
+            page = 1;
+        }
+
+        fetchRepositories();
+    }
+
+    //Pagination Functions 
+    function showLoader() {
+        document.getElementById('loader').style.display = 'block';
+    }
+
+    function hideLoader() {
+        document.getElementById('loader').style.display = 'none';
+    }
+
+    function clearRepositories() {
+        document.getElementById('repositories').innerHTML = '';
+    }
+
+    function enablePagination() {
+        document.getElementById('pagination').style.display = 'flex';
+    }
+
+    function disablePagination() {
+        document.getElementById('pagination').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
